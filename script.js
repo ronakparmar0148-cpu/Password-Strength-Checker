@@ -1,83 +1,78 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial;
+let pass=document.getElementById("pass");
+let fill=document.getElementById("fill");
+let scoreBox=document.getElementById("score");
+let riskBox=document.getElementById("risk");
+let timeBox=document.getElementById("time");
+let suggestBox=document.getElementById("suggest");
+
+let visible=false;
+
+pass.addEventListener("input",function(){
+
+let v=pass.value;
+let score=0;
+
+/* strength engine */
+if(v.length>=8) score+=25;
+if(/[A-Z]/.test(v)) score+=25;
+if(/[0-9]/.test(v)) score+=25;
+if(/[@$!%*?&#]/.test(v)) score+=25;
+
+fill.className="";
+fill.style.width=score+"%";
+
+/* EMPTY */
+if(v.length===0){
+  fill.style.width="0%";
+  scoreBox.innerHTML="";
+  riskBox.innerHTML="";
+  timeBox.innerHTML="";
+  suggestBox.innerHTML="";
+  return;
 }
 
-body {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #0f172a;
-  overflow: hidden;
+/* LEVELS */
+if(score<=25){
+  fill.classList.add("weak");
+  riskBox.innerHTML="⚠ HIGH RISK";
+  timeBox.innerHTML="⏱ Crack Time: Seconds";
+  suggestBox.innerHTML="💡 Add uppercase, numbers, symbols";
+}
+else if(score<=75){
+  fill.classList.add("medium");
+  riskBox.innerHTML="⚠ MEDIUM SECURITY";
+  timeBox.innerHTML="⏱ Crack Time: Hours/Days";
+  suggestBox.innerHTML="💡 Increase complexity";
+}
+else{
+  fill.classList.add("strong");
+  riskBox.innerHTML="🔒 ENTERPRISE LEVEL SECURITY";
+  timeBox.innerHTML="⏱ Crack Time: Years+";
+  suggestBox.innerHTML="💡 Excellent password strength";
 }
 
-/* Animated background */
-.background {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(45deg, #ff004c, #00c6ff, #7b2ff7, #00ff88);
-  background-size: 400% 400%;
-  animation: bg 10s infinite alternate;
-  z-index: -1;
+scoreBox.innerHTML="📊 SCORE: "+score+"/100";
+
+});
+
+/* TOGGLE */
+function toggle(){
+  pass.type = pass.type==="password"?"text":"password";
 }
 
-@keyframes bg {
-  0% {background-position: left;}
-  100% {background-position: right;}
+/* GENERATE */
+function generate(){
+  let c="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$!";
+  let p="";
+  for(let i=0;i<14;i++){
+    p+=c[Math.floor(Math.random()*c.length)];
+  }
+  pass.value=p;
+  pass.dispatchEvent(new Event("input"));
 }
 
-.container {
-  width: 350px;
-  padding: 30px;
-  border-radius: 20px;
-  background: rgba(0,0,0,0.5);
-  backdrop-filter: blur(10px);
-  text-align: center;
-  color: white;
-  box-shadow: 0 0 20px rgba(0,0,0,0.6);
-  animation: pop 0.8s ease;
+/* COPY */
+function copy(){
+  navigator.clipboard.writeText(pass.value);
+  alert("Password Copied!");
 }
-
-@keyframes pop {
-  from {transform: scale(0.5); opacity: 0;}
-  to {transform: scale(1); opacity: 1;}
-}
-
-input {
-  width: 100%;
-  padding: 12px;
-  margin-top: 15px;
-  border: none;
-  border-radius: 10px;
-  outline: none;
-}
-
-.bar {
-  width: 100%;
-  height: 12px;
-  background: #333;
-  border-radius: 10px;
-  margin-top: 15px;
-  overflow: hidden;
-}
-
-#bar-fill {
-  height: 100%;
-  width: 0%;
-  transition: 0.5s;
-  border-radius: 10px;
-}
-
-#label {
-  margin-top: 10px;
-  font-weight: bold;
-}
-
-/* Colors */
-.weak { background: red; width: 30%; }
-.medium { background: orange; width: 65%; }
-.strong { background: limegreen; width: 100%; }

@@ -1,65 +1,99 @@
-*{
-  margin:0;
-  padding:0;
-  font-family:Arial;
+let pass = document.getElementById("pass");
+let fill = document.getElementById("fill");
+let scoreBox = document.getElementById("score");
+let riskBox = document.getElementById("risk");
+let timeBox = document.getElementById("time");
+let suggestBox = document.getElementById("suggest");
+
+pass.addEventListener("input", function () {
+
+    let v = pass.value;
+    let score = 0;
+
+    /* Strength Engine */
+    if (v.length >= 8) score += 25;
+    if (/[A-Z]/.test(v)) score += 25;
+    if (/[0-9]/.test(v)) score += 25;
+    if (/[@$!%*?&#]/.test(v)) score += 25;
+
+    fill.className = "";
+    fill.style.width = score + "%";
+
+    if (v.length === 0) {
+        fill.style.width = "0%";
+        scoreBox.innerHTML = "";
+        riskBox.innerHTML = "";
+        timeBox.innerHTML = "";
+        suggestBox.innerHTML = "";
+        return;
+    }
+
+    if (score <= 25) {
+        fill.classList.add("weak");
+        riskBox.innerHTML = "⚠️ HIGH RISK";
+        timeBox.innerHTML = "⏱️ Crack Time : Seconds";
+        suggestBox.innerHTML = "💡 Add uppercase, numbers and symbols";
+    }
+    else if (score <= 75) {
+        fill.classList.add("medium");
+        riskBox.innerHTML = "⚠️ MEDIUM SECURITY";
+        timeBox.innerHTML = "⏱️ Crack Time : Hours / Days";
+        suggestBox.innerHTML = "💡 Increase password complexity";
+    }
+    else {
+        fill.classList.add("strong");
+        riskBox.innerHTML = "🔒 ENTERPRISE LEVEL SECURITY";
+        timeBox.innerHTML = "⏱️ Crack Time : Years+";
+        suggestBox.innerHTML = "💡 Excellent Password Strength";
+    }
+
+    scoreBox.innerHTML = "📊 SCORE : " + score + "/100";
+
+});
+
+
+/* SHOW / HIDE PASSWORD */
+
+function toggle() {
+
+    if (pass.type === "password") {
+        pass.type = "text";
+    } else {
+        pass.type = "password";
+    }
+
 }
 
-body{
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:linear-gradient(135deg,#0f172a,#020617);
+
+/* GENERATE PASSWORD */
+
+function generate() {
+
+    let chars =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$!%&*";
+
+    let password = "";
+
+    for (let i = 0; i < 14; i++) {
+
+        password += chars.charAt(
+            Math.floor(Math.random() * chars.length)
+        );
+
+    }
+
+    pass.value = password;
+    pass.dispatchEvent(new Event("input"));
+
 }
 
-.container{
-  width:400px;
-  padding:25px;
-  border-radius:15px;
-  background:rgba(0,0,0,0.8);
-  color:#00ffcc;
-  text-align:center;
-  box-shadow:0 0 25px rgba(0,255,255,0.2);
-}
 
-input{
-  width:100%;
-  padding:12px;
-  margin-top:15px;
-  border:none;
-  border-radius:8px;
-  outline:none;
-}
+/* COPY PASSWORD */
 
-.btns button{
-  margin:5px;
-  padding:8px;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
-  background:#111;
-  color:#00ffcc;
-}
+function copy() {
 
-.bar{
-  width:100%;
-  height:12px;
-  background:#222;
-  border-radius:10px;
-  margin-top:15px;
-  overflow:hidden;
-}
+    navigator.clipboard.writeText(pass.value);
 
-#fill{
-  height:100%;
-  width:0%;
-  transition:0.4s;
-}
+    alert("✅ Password Copied Successfully!");
 
-.weak{background:red;width:30%;}
-.medium{background:orange;width:65%;}
-.strong{background:lime;width:100%;}
-
-#score,#risk,#time,#suggest{
-  margin-top:8px;
 }

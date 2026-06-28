@@ -2,34 +2,51 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Enterprise Password Security System</title>
+<title>Password Strength Checker</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="container">
 
-  <h1>🔐 Enterprise Security Analyzer</h1>
+    <h1>🔐 PASSWORD-STRENGTH-CHECKER</h1>
 
-  <input type="password" id="pass" placeholder="Enter password">
+    <input
+        type="password"
+        id="pass"
+        placeholder="Enter password">
 
-  <div class="btns">
-    <button onclick="toggle()">👁</button>
-    <button onclick="generate()">🔑</button>
-    <button onclick="copy()">📋</button>
-  </div>
+    <div class="btns">
 
-  <div class="bar">
-    <div id="fill"></div>
-  </div>
+        <button onclick="toggle()">
+            <span class="icon">👁️</span>
+            <span class="text">Show</span>
+        </button>
 
-  <div id="score"></div>
-  <div id="risk"></div>
-  <div id="time"></div>
-  <div id="suggest"></div>
+        <button onclick="generate()">
+            <span class="icon">🔑</span>
+            <span class="text">Generate</span>
+        </button>
+
+        <button onclick="copy()">
+            <span class="icon">📋</span>
+            <span class="text">Copy</span>
+        </button>
+
+    </div>
+
+    <div class="bar">
+        <div id="fill"></div>
+    </div>
+
+    <div id="score"></div>
+    <div id="risk"></div>
+    <div id="time"></div>
+    <div id="suggest"></div>
 
 </div>
 
 <script src="script.js"></script>
+
 </body>
 </html>
